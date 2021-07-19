@@ -71,7 +71,7 @@ function SignUp(props) {
     const classes = useStyles();
     const [passwordStrength, setPasswordStrength] = useState(0);
     const passwordStrengthIndicator = ['very weak', 'weak', 'weak', 'medium', 'strong'];
-    const { register, handleSubmit, control, errors } = useForm();
+    const { register, watch, handleSubmit, control, formState: { errors} } = useForm();
     const onSubmit = data => {
         props.signUp({ email: data.email, gender: data.gender, username: data.username, password: data.passwordOne });
         setOpen(true)
@@ -91,7 +91,7 @@ function SignUp(props) {
                     <FormGroup>
                         <FormControl>
                             <InputLabel>Username</InputLabel>
-                            <Input name="username" inputRef={register({ required: true })} />
+                            <Input {...register('userName', { required: true })}/>
                             <FormHelperText>Enter the name you wish to be known by.</FormHelperText>
                             <FormHelperText>{errors.username && <span className={classes.errorText}>Username is required</span>}</FormHelperText>
                         </FormControl>
@@ -99,7 +99,7 @@ function SignUp(props) {
                     <FormGroup>
                         <FormControl>
                             <InputLabel>Email</InputLabel>
-                            <Input name="email" inputRef={register({ required: true })} />
+                            <Input {...register('email', { required: true })} />
                             <FormHelperText>Enter the email you wish to register your account with</FormHelperText>
                             <FormHelperText>{errors.email && <span className={classes.errorText}>Email is required</span>}</FormHelperText>
                         </FormControl>
@@ -107,7 +107,7 @@ function SignUp(props) {
                     <FormGroup>
                         <FormControl>
                             <InputLabel>Password</InputLabel>
-                            <Input name="passwordOne" type="password" onChange={event => setPasswordStrength(zxcvbn(event.target.value))} inputRef={register({ required: true })} />
+                            <Input type="password" {...register('passwordOne', { required: true })} onChange={event => setPasswordStrength(zxcvbn(event.target.value))} />
                             <FormHelperText>{errors.passwordOne && <span className={classes.errorText}>Password is required</span>}</FormHelperText>
                             <div>
                                 <LinearProgress variant="determinate" value={(passwordStrength.score / 4) * 100} />
@@ -118,18 +118,22 @@ function SignUp(props) {
                     <FormGroup>
                         <FormControl>
                             <InputLabel>Confirm Password</InputLabel>
-                            <Input name="passwordTwo" type="password" inputRef={register({ required: true })} />
+                            <Input type="password" {...register('passwordTwo', { required: true })} />
                             <FormHelperText>{errors.passwordTwo && <span className={classes.errorText}>Please confirm your password is required</span>}</FormHelperText>
                         </FormControl>
                     </FormGroup>
                     <FormGroup>
                         <FormControl>
                             <FormLabel component="legend">Gender</FormLabel>
-                            <Controller as={RadioGroup} control={control} aria-label="gender" name="gender" rules={{ required: true }}>
-                                <FormControlLabel value="female" control={<Radio />} label="Female" />
-                                <FormControlLabel value="male" control={<Radio />} label="Male" />
-                                <FormControlLabel value="other" control={<Radio />} label="Other" />
-                            </Controller>
+                            <Controller control={control} aria-label="gender" name="gender"
+                                render={({ field: { onChange, value } }) => (
+                                    <div>
+                                        <FormControlLabel value="female" control={<Radio />} label="Female" />
+                                        <FormControlLabel value="male" control={<Radio />} label="Male" />
+                                        <FormControlLabel value="other" control={<Radio />} label="Other" />
+                                    </div>
+                                )}
+                            />
                             <FormHelperText>{errors.gender && <span className={classes.errorText}>Please confirm your password is required</span>}</FormHelperText>
                         </FormControl>
                     </FormGroup>

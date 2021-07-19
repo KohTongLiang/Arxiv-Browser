@@ -79,7 +79,7 @@ const mapDispatchToProps = dispatch => {
 function SignIn(props) {
     const classes = useStyles();
     const [open, setOpen] = useState(true);
-    const { register, handleSubmit, errors } = useForm();
+    const { register, handleSubmit, formState: { errors} } = useForm();
     const onSubmit = data => {
         props.signIn(data);
         setOpen(true);
@@ -101,7 +101,7 @@ function SignIn(props) {
                         <FormGroup>
                             <FormControl>
                                 <InputLabel>Email</InputLabel>
-                                <Input name="email" inputRef={register({ required: true })} />
+                                <Input {...register('email', { required: true })} />
                                 <FormHelperText>Enter the email you used for registration</FormHelperText>
                                 <FormHelperText>{errors.email && <span className={classes.errorText}>Email is required</span>}</FormHelperText>
                             </FormControl>
@@ -110,7 +110,7 @@ function SignIn(props) {
                         <FormGroup>
                             <FormControl>
                                 <InputLabel>Password</InputLabel>
-                                <Input type="password" name="password" inputRef={register({ required: true })} />
+                                <Input type="password" name="password" {...register('password', { required: true })} />
                                 <FormHelperText>{errors.password && <span className={classes.errorText}>Password is required</span>}</FormHelperText>
                             </FormControl>
                         </FormGroup>
