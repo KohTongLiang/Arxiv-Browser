@@ -1,29 +1,28 @@
 import { put, takeEvery, call, fork, take } from 'redux-saga/effects';
 import axios from 'axios';
-import { SIGN_IN, SIGN_UP, SIGN_IN_SUCCESS, SIGN_IN_FAILURE, SIGN_UP_SUCCESS, SIGN_UP_FAILURE } from '../Constants/actiontype';
+import firebase from 'firebase'
+import rsf from './firebase'
+import { SIGN_IN, SIGN_UP, SIGN_IN_SUCCESS, SIGN_IN_FAILURE, SIGN_UP_SUCCESS, SIGN_UP_FAILURE,
+SIGN_OUT_SUCCESS, SIGN_OUT } from '../Constants/actiontype';
 
 export default function* AuthSaga() {
-    yield takeEvery(SIGN_UP, handleSignUp);
-    yield takeEvery(SIGN_IN, handleSignIn);
+    yield fork(loginStatusWatcher)
+    yield takeEvery(SIGN_UP, handleSignUp)
+    yield takeEvery(SIGN_IN, handleSignIn)
+    yield takeEvery(SIGN_OUT, handleSignOut)
 }
+
+const authProvider = new firebase.auth.GoogleAuthProvider()
 
 // make a call to authentication server and get back a JWT.
 function* handleSignIn(action) {
     try {
-        const resp = yield call(() => axios.post(process.env.REACT_APP_API_URL + '/api/auth/login', {
-            email: action.payload.email,
-            password: action.payload.password,
-        }).then(function (data) {
-            return data;
-        }));
-
-        if (resp.data.auth) {
+        const user = yield call(rsf.auth.signInWithEmailAndPassword, action.payload.email, action.payload.password)
+        
+        if (user) {
             yield put({
-                type: SIGN_IN_SUCCESS, payload: {
-                    token: resp.data.token,
-                    username: action.payload.username,
-                }
-            });
+                type: SIGN_IN_SUCCESS, payload: user
+            })
         } else {
             yield put({ type: SIGN_IN_FAILURE, payload: "Error authentication user." });
         }
@@ -35,20 +34,11 @@ function* handleSignIn(action) {
 // Handler to perform sign up action. Takes input by user and create a user account on firebase authentication service
 function* handleSignUp(action) {
     try {
-        const resp = yield call(() => axios.post(process.env.REACT_APP_API_URL + '/api/auth/register', {
-            email: action.payload.email,
-            name: action.payload.username,
-            password: action.payload.password,
-        }).then(function (data) {
-            return data;
-        }));
-
-        if (resp.data.auth) {
+        const user = yield call(rsf.auth.createUserWithEmailAndPassword, action.payload.email, action.payload.password);
+        
+        if (user) {
             yield put({
-                type: SIGN_UP_SUCCESS, payload: {
-                    token: resp.data.token,
-                    username: action.payload.username,
-                }
+                type: SIGN_UP_SUCCESS, payload: user
             });
         } else {
             yield put({ type: SIGN_UP_FAILURE, payload: "Error registering user." });
@@ -56,4 +46,33 @@ function* handleSignUp(action) {
     } catch (err) {
         yield put({ type: SIGN_UP_FAILURE, payload: err.message });
     }
+}
+
+function* handleSignOut(action) {
+    try {
+        const data = yield call(rsf.auth.signOut);
+        
+        if (data) {
+            yield put({
+                type: SIGN_OUT_SUCCESS
+            });
+        } else {
+            yield put({ type: SIGN_UP_FAILURE, payload: "Error registering user." });
+        }
+    } catch (err) {
+        yield put({ type: SIGN_UP_FAILURE, payload: err.message });
+    }
+}
+
+function* loginStatusWatcher() {
+  const channel = yield call(rsf.auth.channel)
+
+  while (true) {
+    const { user } = yield take(channel)
+    if (user) {
+      yield put({ type: SIGN_IN_SUCCESS, payload: user });
+    } else {
+      yield put({ type: SIGN_OUT_SUCCESS })
+    }
+  }
 }

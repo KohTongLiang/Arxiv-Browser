@@ -15,11 +15,19 @@ import { APP_NAME } from '../../Constants/values';
 import { STYLE } from '../../Constants/styles';
 import { ARTICLES, SIGN_IN } from '../../Constants/routes';
 
+import { signOut } from '../../Action/auth';
+
 const useStyles = makeStyles((theme) => (STYLE));
 
 const mapStateToProps = state => {
     return {
         auth: state.AuthReducer.auth,
+    }
+}
+
+const mapDispatchToProps = dispatch => {
+    return {
+        signOut: () => dispatch(signOut()),
     }
 }
 
@@ -158,6 +166,7 @@ function NavigationBar(props) {
                             >
                                 <MenuItem onClick={handleClose}>Profile</MenuItem>
                                 <MenuItem onClick={handleClose}>My account</MenuItem>
+                                <MenuItem onClick={props.signOut}>Sign Out</MenuItem>
                             </Menu>
                         </div>
                     )}
@@ -168,4 +177,4 @@ function NavigationBar(props) {
     );
 }
 
-export default connect(mapStateToProps, null)(NavigationBar);
+export default connect(mapStateToProps, mapDispatchToProps)(NavigationBar);

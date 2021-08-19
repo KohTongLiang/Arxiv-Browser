@@ -70,6 +70,13 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
+const mapStateToProps = (state) => {
+    const appState = {
+        errorMessage: state.AuthReducer.errorMessage,
+    };
+    return appState;
+};
+
 const mapDispatchToProps = dispatch => {
     return {
         signIn: signInCredentials => dispatch(signIn(signInCredentials)),
@@ -146,10 +153,10 @@ function SignIn(props) {
                     </form>
                 </div>
             </Grid>
-            {props.errorMessage && (
+            {(props.errorMessage && open) && (
                 <Snackbar
                     open={open} color='red' autoHideDuration={600} message={props.errorMessage} action={
-                        <Button color="inherit" size="small" onClick={() => props.clearErrorMessage()}>
+                        <Button color="inherit" size="small" onClick={() => setOpen(!open)}>
                             X
                         </Button>
                     }
@@ -159,4 +166,4 @@ function SignIn(props) {
     );
 }
 
-export default connect(null, mapDispatchToProps)(SignIn);
+export default connect(mapStateToProps, mapDispatchToProps)(SignIn);

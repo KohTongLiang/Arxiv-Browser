@@ -73,7 +73,8 @@ function SignUp(props) {
     const passwordStrengthIndicator = ['very weak', 'weak', 'weak', 'medium', 'strong'];
     const { register, watch, handleSubmit, control, formState: { errors} } = useForm();
     const onSubmit = data => {
-        props.signUp({ email: data.email, gender: data.gender, username: data.username, password: data.passwordOne });
+        props.signUp({ email: data.email, username: data.username, password: data.passwordOne });
+        console.log(data)
         setOpen(true)
     }
 
@@ -120,21 +121,6 @@ function SignUp(props) {
                             <InputLabel>Confirm Password</InputLabel>
                             <Input type="password" {...register('passwordTwo', { required: true })} />
                             <FormHelperText>{errors.passwordTwo && <span className={classes.errorText}>Please confirm your password is required</span>}</FormHelperText>
-                        </FormControl>
-                    </FormGroup>
-                    <FormGroup>
-                        <FormControl>
-                            <FormLabel component="legend">Gender</FormLabel>
-                            <Controller control={control} aria-label="gender" name="gender"
-                                render={({ field: { onChange, value } }) => (
-                                    <div>
-                                        <FormControlLabel value="female" control={<Radio />} label="Female" />
-                                        <FormControlLabel value="male" control={<Radio />} label="Male" />
-                                        <FormControlLabel value="other" control={<Radio />} label="Other" />
-                                    </div>
-                                )}
-                            />
-                            <FormHelperText>{errors.gender && <span className={classes.errorText}>Please confirm your password is required</span>}</FormHelperText>
                         </FormControl>
                     </FormGroup>
                     <FormGroup>
