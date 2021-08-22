@@ -12,5 +12,8 @@ export const STYLE = {
     appbarTitle: {
         flexGrow: 1,
         textAlign: 'center',
+    },
+    mainContainer: {
+        paddingTop: '10%'
     }
 }

@@ -1,24 +1,18 @@
-import React, { useState } from 'react';
-import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
-import { useForm, Controller } from 'react-hook-form';
-import zxcvbn from 'zxcvbn';
+import React, { useState } from 'react'
+import { Link } from 'react-router-dom'
+import { useForm, Controller } from 'react-hook-form'
+import zxcvbn from 'zxcvbn'
 
-// import material-ui components
 import {
     Avatar, Container, Button, CssBaseline, TextField, FormControlLabel, Box, Typography, FormGroup, FormControl,
     InputLabel, Input, FormHelperText, FormLabel, RadioGroup, Radio, LinearProgress
-} from '@material-ui/core';
-import { LockOutlined as LockOutlinedIcon } from '@material-ui/icons';
-import { makeStyles } from '@material-ui/core/styles';
+} from '@material-ui/core'
+import { LockOutlined as LockOutlinedIcon } from '@material-ui/icons'
+import { makeStyles } from '@material-ui/core/styles'
 
-// import redux components
-import { signUp } from '../../Action/auth';
-
-// import constants
-import * as STYLES from '../../Constants/styles';
-import { SITE_AUTHOR } from '../../Constants/values';
-import { SIGN_IN } from '../../Constants/routes';
+import * as STYLES from '../../Constants/styles'
+import { SITE_AUTHOR } from '../../Constants/values'
+import { SIGN_IN } from '../../Constants/routes'
 
 function Copyright() {
     return (
@@ -31,12 +25,6 @@ function Copyright() {
             {'.'}
         </Typography>
     );
-}
-
-const mapDispatchToProps = dispatch => {
-    return {
-        signUp: signUpCredentials => dispatch(signUp(signUpCredentials)),
-    }
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -74,7 +62,6 @@ function SignUp(props) {
     const { register, watch, handleSubmit, control, formState: { errors} } = useForm();
     const onSubmit = data => {
         props.signUp({ email: data.email, username: data.username, password: data.passwordOne });
-        console.log(data)
         setOpen(true)
     }
 
@@ -92,7 +79,7 @@ function SignUp(props) {
                     <FormGroup>
                         <FormControl>
                             <InputLabel>Username</InputLabel>
-                            <Input {...register('userName', { required: true })}/>
+                            <Input {...register('username', { required: true })}/>
                             <FormHelperText>Enter the name you wish to be known by.</FormHelperText>
                             <FormHelperText>{errors.username && <span className={classes.errorText}>Username is required</span>}</FormHelperText>
                         </FormControl>
@@ -137,7 +124,7 @@ function SignUp(props) {
                 <Copyright />
             </Box>
         </Container>
-    );
+    )
 }
 
-export default connect(null, mapDispatchToProps)(SignUp);
+export default SignUp

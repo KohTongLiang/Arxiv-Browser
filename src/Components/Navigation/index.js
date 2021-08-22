@@ -1,35 +1,20 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { connect } from 'react-redux';
+import React, { useState } from 'react'
+import { Link } from 'react-router-dom'
 
 // import material ui components
 import {
     AppBar, Toolbar, Typography, IconButton, Button, MenuItem, Menu, Hidden, List, ListItem, ListItemText, Divider,
     Drawer, ListItemIcon
-} from '@material-ui/core';
-import { AccountCircle, Menu as MenuIcon, Home as HomeIcon } from '@material-ui/icons';
-import { makeStyles } from '@material-ui/core/styles';
+} from '@material-ui/core'
+import { AccountCircle, Menu as MenuIcon, Home as HomeIcon } from '@material-ui/icons'
+import { makeStyles } from '@material-ui/core/styles'
 
 // import constants
-import { APP_NAME } from '../../Constants/values';
-import { STYLE } from '../../Constants/styles';
-import { ARTICLES, SIGN_IN } from '../../Constants/routes';
+import { APP_NAME } from '../../Constants/values'
+import { STYLE } from '../../Constants/styles'
+import { ARTICLES, SIGN_IN } from '../../Constants/routes'
 
-import { signOut } from '../../Action/auth';
-
-const useStyles = makeStyles((theme) => (STYLE));
-
-const mapStateToProps = state => {
-    return {
-        auth: state.AuthReducer.auth,
-    }
-}
-
-const mapDispatchToProps = dispatch => {
-    return {
-        signOut: () => dispatch(signOut()),
-    }
-}
+const useStyles = makeStyles((theme) => (STYLE))
 
 function NavigationBar(props) {
     const classes = useStyles();
@@ -177,4 +162,4 @@ function NavigationBar(props) {
     );
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(NavigationBar);
+export default NavigationBar

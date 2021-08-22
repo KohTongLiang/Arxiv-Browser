@@ -1,23 +1,17 @@
-import React, { useState } from 'react';
-import { connect } from 'react-redux';
-import { useForm } from 'react-hook-form';
-import { Link } from 'react-router-dom';
+import React, { useState } from 'react'
+import { useForm } from 'react-hook-form'
+import { Link } from 'react-router-dom'
 
-// import material ui components
 import {
     Avatar, Button, CssBaseline, TextField, FormControlLabel, Checkbox, Paper, Grid, Box, Typography,
     FormGroup, FormControl, Snackbar, Input, FormHelperText, InputLabel
-} from '@material-ui/core';
-import { LockOutlined as LockOutlinedIcon } from '@material-ui/icons';
-import { makeStyles } from '@material-ui/core/styles';
+} from '@material-ui/core'
+import { LockOutlined as LockOutlinedIcon } from '@material-ui/icons'
+import { makeStyles } from '@material-ui/core/styles'
 
-// import redux components
-import { signIn } from '../../Action/auth';
-
-// import constants
-import { SITE_AUTHOR } from '../../Constants/values';
-import { STYLE } from '../../Constants/styles';
-import { SIGN_UP } from '../../Constants/routes';
+import { SITE_AUTHOR } from '../../Constants/values'
+import { STYLE } from '../../Constants/styles'
+import { SIGN_UP } from '../../Constants/routes'
 
 function Copyright() {
     return (
@@ -29,7 +23,7 @@ function Copyright() {
             {new Date().getFullYear()}
             {'.'}
         </Typography>
-    );
+    )
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -68,20 +62,7 @@ const useStyles = makeStyles((theme) => ({
         textDecoration: 'none',
         color: 'yellow',
     },
-}));
-
-const mapStateToProps = (state) => {
-    const appState = {
-        errorMessage: state.AuthReducer.errorMessage,
-    };
-    return appState;
-};
-
-const mapDispatchToProps = dispatch => {
-    return {
-        signIn: signInCredentials => dispatch(signIn(signInCredentials)),
-    }
-}
+}))
 
 function SignIn(props) {
     const classes = useStyles();
@@ -163,7 +144,7 @@ function SignIn(props) {
                 />
             )}
         </Grid>
-    );
+    )
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(SignIn);
+export default SignIn

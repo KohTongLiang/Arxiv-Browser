@@ -1,9 +1,13 @@
-import { put, takeEvery, call, fork, take } from 'redux-saga/effects';
+import { put, takeEvery, call, fork, take } from 'redux-saga/effects'
+
 import axios from 'axios';
+
 import firebase from 'firebase'
 import rsf from './firebase'
+
 import { SIGN_IN, SIGN_UP, SIGN_IN_SUCCESS, SIGN_IN_FAILURE, SIGN_UP_SUCCESS, SIGN_UP_FAILURE,
-SIGN_OUT_SUCCESS, SIGN_OUT } from '../Constants/actiontype';
+SIGN_OUT_SUCCESS, SIGN_OUT, EMAIL_VERIFICATION_ERROR, SEND_EMAIL_VERIFICATION
+ } from '../Constants/actiontype'
 
 export default function* AuthSaga() {
     yield fork(loginStatusWatcher)
@@ -14,7 +18,6 @@ export default function* AuthSaga() {
 
 const authProvider = new firebase.auth.GoogleAuthProvider()
 
-// make a call to authentication server and get back a JWT.
 function* handleSignIn(action) {
     try {
         const user = yield call(rsf.auth.signInWithEmailAndPassword, action.payload.email, action.payload.password)
@@ -31,7 +34,6 @@ function* handleSignIn(action) {
     }
 }
 
-// Handler to perform sign up action. Takes input by user and create a user account on firebase authentication service
 function* handleSignUp(action) {
     try {
         const user = yield call(rsf.auth.createUserWithEmailAndPassword, action.payload.email, action.payload.password);
@@ -39,7 +41,7 @@ function* handleSignUp(action) {
         if (user) {
             yield put({
                 type: SIGN_UP_SUCCESS, payload: user
-            });
+            })
         } else {
             yield put({ type: SIGN_UP_FAILURE, payload: "Error registering user." });
         }
